@@ -1,245 +1,205 @@
-import React, { useState } from "react";
-import {
-  Grid,
-  TextField,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  Select,
-  MenuItem,
-  Button,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
-import {
-  HomeOutlined,
-  PoolOutlined,
-  FitnessCenterOutlined,
-  AcUnitOutlined,
-  WifiOutlined,
-  KitchenOutlined,
-} from "@mui/icons-material";
-import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-export default function PropertyForm() {
-  const [previewImages, setPreviewImages] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="localhost:3000">
+        SHS
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
-  const handleImageUpload = (event) => {
-    const files = event.target.files;
-    const newImages = [];
-    Object.keys(files).forEach((i) => {
-      const file = files[i];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        newImages.push(e.target.result);
-        if (newImages.length === files.length) {
-          setPreviewImages(newImages);
-        }
-      };
-      reader.readAsDataURL(file);
+// TODO remove, this demo shouldn't need to reset the theme.
+const defaultTheme = createTheme();
+
+export default function SignUp() {
+  const [imageIndex, setImageIndex] = React.useState(0);
+  const images = [
+    "/placeholder_2.jpg",
+    "/placeholder_3.jpg",
+    "/placeholder_4.jpg",
+  ]; // Replace with the actual image URLs
+
+  const handleImageChange = (forward) => {
+    setImageIndex((prevIndex) => {
+      const nextIndex = forward
+        ? (prevIndex + 1) % images.length
+        : (prevIndex - 1 + images.length) % images.length;
+      return nextIndex;
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      propertyName: data.get("propertyName"),
+      address: data.get("address"),
+      googlemaps: data.get("googlemaps"),
+      price: data.get("price"),
+      amenities: data.get("amenities"),
+      // Add the rest of the form fields
     });
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <FormControl component="fieldset" sx={{ m: 1 }}>
-          <FormLabel component="legend">Property Details</FormLabel>
-          <FormGroup>
-            <TextField
-              name="propertyName"
-              label="Property Name"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-            <TextField
-              name="propertySpace"
-              label="Property Space (ft²)"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-            <TextField
-              name="streetAddress"
-              label="Street Address"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-            <TextField
-              name="city"
-              label="City"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-            <TextField
-              name="state"
-              label="State"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-            <TextField
-              name="zipCode"
-              label="Zip Code"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-              inputProps={{
-                pattern: "^\\d{5}(?:[-\\s]\\d{4})?$",
-              }}
-            />
-            <Select
-              name="propertyType"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-              displayEmpty
-            >
-              <MenuItem value="" disabled>
-                Property Type
-              </MenuItem>
-              <MenuItem value={"room"}>Room</MenuItem>
-              <MenuItem value={"house"}>House</MenuItem>
-              <MenuItem value={"apartment"}>Apartment</MenuItem>
-              <MenuItem value={"studio"}>Studio</MenuItem>
-            </Select>
-            <Select
-              name="leaseTerm"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-              displayEmpty
-            >
-              <MenuItem value="" disabled>
-                Lease Term
-              </MenuItem>
-              <MenuItem value={"monthly"}>Monthly</MenuItem>
-              <MenuItem value={"threeMonths"}>Three Months</MenuItem>
-              <MenuItem value={"sixMonths"}>Six Months</MenuItem>
-              <MenuItem value={"annual"}>Annual</MenuItem>
-            </Select>
-            <TextField
-              name="price"
-              label="Price ($/Month)"
-              variant="outlined"
-              fullWidth
-              sx={{ m: 1 }}
-            />
-          </FormGroup>
-        </FormControl>
-      </Grid>
-      {/*<FormControlLabel control={<Checkbox color='default' />} label={<><PoolOutlined />Bills Inclusion</>} sx={{ m: 1 }} />*/}
-      <Grid item xs={12}>
-        <FormControl component="fieldset" sx={{ m: 1 }}>
-          <FormLabel component="legend">Utilities</FormLabel>
-          <FormGroup row>
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label={
-                <>
-                  <HomeOutlined />
-                  Washer/Dryer
-                </>
-              }
-              sx={{ m: 1 }}
-            />
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label={
-                <>
-                  <FitnessCenterOutlined />
-                  Gym
-                </>
-              }
-              sx={{ m: 1 }}
-            />
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label={
-                <>
-                  <AcUnitOutlined />
-                  AC
-                </>
-              }
-              sx={{ m: 1 }}
-            />
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label={
-                <>
-                  <WifiOutlined />
-                  WIFI
-                </>
-              }
-              sx={{ m: 1 }}
-            />
-            <FormControlLabel
-              control={<Checkbox color="default" />}
-              label={
-                <>
-                  <KitchenOutlined />
-                  Kitchen Equipment
-                </>
-              }
-              sx={{ m: 1 }}
-            />
-          </FormGroup>
-        </FormControl>
-      </Grid>
-      <Grid item xs={12}>
-        <FormControl component="fieldset" sx={{ m: 1 }}>
-          <FormLabel component="legend">Upload Images</FormLabel>
-          {previewImages.length > 0 ? (
-            <>
-              {currentImageIndex > 0 && (
-                <ArrowBackIosIcon
-                  onClick={() => setCurrentImageIndex(currentImageIndex - 1)}
-                  style={{
-                    cursor: "pointer",
-                    position: "absolute",
-                    left: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "white",
-                  }}
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Property Registration
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-name"
+                  name="propertyName"
+                  required
+                  fullWidth
+                  id="propertyName"
+                  label="Property Name"
+                  autoFocus
                 />
-              )}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="googlemaps"
+                  label="Google Maps"
+                  name="googlemaps"
+                  autoComplete="googlemaps"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="price"
+                  label="Price"
+                  name="price"
+                  autoComplete="price"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="amenities"
+                  label="Amenities"
+                  name="amenities"
+                  autoComplete="amenities"
+                />
+              </Grid>
+            </Grid>
+            <div style={{ position: "relative" }}>
               <img
-                src={previewImages[currentImageIndex]}
-                alt="Preview"
-                style={{ width: "256px", height: "256px", objectFit: "cover" }}
+                src={images[imageIndex]}
+                alt="Property"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  marginBottom: "16px",
+                  borderRadius: "10px",
+                }}
               />
-              {currentImageIndex < previewImages.length - 1 && (
-                <ArrowForwardIosIcon
-                  onClick={() => setCurrentImageIndex(currentImageIndex + 1)}
-                  style={{
-                    cursor: "pointer",
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "white",
-                  }}
-                />
-              )}
-            </>
-          ) : (
-            <ImageOutlinedIcon
-              style={{ fontSize: "256px", color: "lightgray" }}
-            />
-          )}
-          <Button variant="contained" component="label">
-            Upload File
-            <input type="file" hidden multiple onChange={handleImageUpload} />
-          </Button>
-        </FormControl>
-      </Grid>
-    </Grid>
+              <ArrowBackIosIcon
+                style={{
+                  cursor: "pointer",
+                  position: "absolute",
+                  top: "50%",
+                  left: "10px",
+                  transform: "translateY(-50%)",
+                  fontSize: "2rem",
+                  backgroundColor: "rgba(255, 255, 255, 0.7)",
+                  borderRadius: "50%",
+                  padding: "8px",
+                }}
+                onClick={() => handleImageChange(false)}
+              />
+              <ArrowForwardIosIcon
+                style={{
+                  cursor: "pointer",
+                  position: "absolute",
+                  top: "50%",
+                  right: "10px",
+                  transform: "translateY(-50%)",
+                  fontSize: "2rem",
+                  backgroundColor: "rgba(255, 255, 255, 0.7)",
+                  borderRadius: "50%",
+                  padding: "8px",
+                }}
+                onClick={() => handleImageChange(true)}
+              />
+            </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 5 }} />
+      </Container>
+    </ThemeProvider>
   );
 }
