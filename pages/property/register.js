@@ -1,10 +1,9 @@
-import * as React from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,59 +11,84 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import IconButton from "@mui/material/IconButton";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="localhost:3000">
-        SHS
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignUp() {
-  const [imageIndex, setImageIndex] = React.useState(0);
-  const images = [
-    "/placeholder_2.jpg",
-    "/placeholder_3.jpg",
-    "/placeholder_4.jpg",
-  ]; // Replace with the actual image URLs
+export default function PropertyRegistration() {
+  const router = useRouter(); // Access the router
+  const [uploadedImages, setUploadedImages] = useState([]);
 
-  const handleImageChange = (forward) => {
-    setImageIndex((prevIndex) => {
-      const nextIndex = forward
-        ? (prevIndex + 1) % images.length
-        : (prevIndex - 1 + images.length) % images.length;
-      return nextIndex;
-    });
+  const handleGoBack = () => {
+    router.push("/homepage"); // Redirect to the homepage
   };
 
-  const handleSubmit = (event) => {
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files);
+    const imageUrls = files.map((file) => URL.createObjectURL(file));
+    setUploadedImages(imageUrls);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      propertyName: data.get("propertyName"),
-      address: data.get("address"),
-      googlemaps: data.get("googlemaps"),
-      price: data.get("price"),
-      amenities: data.get("amenities"),
-      // Add the rest of the form fields
-    });
+    const formData = new FormData(event.target);
+    // Checking for empty fields
+    const formValues = Array.from(formData.values());
+    const hasEmptyFields = formValues.some((value) => value === "");
+
+    if (hasEmptyFields) {
+      alert("Please fill all the fields before submitting.");
+      return;
+    }
+
+    const propertyData = {
+      propertyownerName: formData.get("propertyownerName"),
+      address: formData.get("address"),
+      price: formData.get("price"),
+      amenities: formData.get("amenities"),
+      housingType: formData.get("housingType"),
+      description: formData.get("description"),
+      contactEmail: formData.get("contactEmail"),
+      contactPhone: formData.get("contactPhone"),
+      //propertyId: Math.floor(Math.random() * 1000), // Generate a random property ID
+      approvalStatus: "0",
+      images: uploadedImages, // Include uploaded images in the property data
+    };
+
+    try {
+      const response = await fetch("http://localhost:3002/properties", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(propertyData),
+      });
+
+      if (response.ok) {
+        // Property registered successfully
+        console.log("Property registered:", propertyData);
+        window.alert("Property registered successfully!"); // Show success message
+        // Redirect to homepage after alert confirmation
+        if (window.confirm("Click OK to go to the homepage.")) {
+          router.push("/homepage"); // Redirect to homepage
+        }
+      } else {
+        // Handle registration failure
+        console.error("Failed to register property. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
   };
+
+  const propertyImages = uploadedImages.map((imageUrl, index) => ({
+    original: imageUrl,
+    thumbnail: imageUrl,
+    originalAlt: `Image ${index + 1}`,
+    thumbnailAlt: `Thumbnail ${index + 1}`,
+  }));
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -78,6 +102,13 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
+          <IconButton
+            onClick={handleGoBack}
+            sx={{ position: "absolute", top: 20, left: 20 }}
+          >
+            <ArrowBack />
+          </IconButton>
+
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -94,11 +125,11 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="propertyName"
+                  name="propertyownerName"
                   required
                   fullWidth
-                  id="propertyName"
-                  label="Property Name"
+                  id="propertyownerName"
+                  label="Property Owner Name"
                   autoFocus
                 />
               </Grid>
@@ -114,11 +145,24 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  required
                   fullWidth
-                  id="googlemaps"
-                  label="Google Maps"
-                  name="googlemaps"
-                  autoComplete="googlemaps"
+                  type="email"
+                  id="contactEmail"
+                  label="Contact Email"
+                  name="contactEmail"
+                  autoComplete="contactEmail"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  type="tel"
+                  id="contactPhone"
+                  label="Contact Phone Number"
+                  name="contactPhone"
+                  autoComplete="contactPhone"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -128,11 +172,23 @@ export default function SignUp() {
                   id="price"
                   label="Price"
                   name="price"
+                  type="number"
                   autoComplete="price"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  required
+                  fullWidth
+                  id="housingType"
+                  label="Housing Type"
+                  name="housingType"
+                  autoComplete="housingType"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
                   fullWidth
                   id="amenities"
                   label="Amenities"
@@ -140,54 +196,47 @@ export default function SignUp() {
                   autoComplete="amenities"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="description"
+                  label="Description"
+                  name="description"
+                  autoComplete="description"
+                  multiline
+                  rows={4}
+                  inputProps={{ maxLength: 100 }} // Set maximum character limit
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  multiple
+                />
+              </Grid>
+              {uploadedImages.length > 0 && (
+                <Grid item xs={12}>
+                  {uploadedImages.map((imageUrl, index) => (
+                    <img
+                      key={index}
+                      src={imageUrl}
+                      alt={`Image ${index + 1}`}
+                      style={{ width: "100%", marginTop: 10 }}
+                    />
+                  ))}
+                </Grid>
+              )}
             </Grid>
-            <div style={{ position: "relative" }}>
-              <img
-                src={images[imageIndex]}
-                alt="Property"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  marginBottom: "16px",
-                  borderRadius: "10px",
-                }}
-              />
-              <ArrowBackIosIcon
-                style={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: "50%",
-                  left: "10px",
-                  transform: "translateY(-50%)",
-                  fontSize: "2rem",
-                  backgroundColor: "rgba(255, 255, 255, 0.7)",
-                  borderRadius: "50%",
-                  padding: "8px",
-                }}
-                onClick={() => handleImageChange(false)}
-              />
-              <ArrowForwardIosIcon
-                style={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: "50%",
-                  right: "10px",
-                  transform: "translateY(-50%)",
-                  fontSize: "2rem",
-                  backgroundColor: "rgba(255, 255, 255, 0.7)",
-                  borderRadius: "50%",
-                  padding: "8px",
-                }}
-                onClick={() => handleImageChange(true)}
-              />
-            </div>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Register Property
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -198,7 +247,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );

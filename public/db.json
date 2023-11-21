@@ -1,0 +1,39 @@
+{
+  "users": [
+    {
+      "firstName": "Keerthi",
+      "lastName": "Devireddy",
+      "email": "keerthidevireddy000@gmail.com",
+      "password": "abc123",
+      "id": 1
+    },
+    {
+      "firstName": "admin",
+      "lastName": "SHS",
+      "email": "admin123@gmail.com",
+      "password": "admin123",
+      "id": 2
+    },
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "jd12@gmail.com",
+      "password": "jd123",
+      "id": 3
+    },
+    {
+      "firstName": "Mack",
+      "lastName": "William",
+      "email": "mw23@gmail.com",
+      "password": "mack123",
+      "id": 4
+    },
+    {
+      "firstName": "sony",
+      "lastName": "annem",
+      "email": "sandhaysony.137@gmail.com",
+      "password": "Sony.137",
+      "id": 5
+    }
+  ]
+}

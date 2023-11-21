@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
@@ -18,74 +17,34 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import TextField from "@mui/material/TextField";
 
+// Import your properties data
+import propertiesData from "../public/properties.json";
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: `url("/oip_2.jpg")`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
-  logoImage: {
-    width: "500px",
-    height: "auto",
-    marginBottom: "150px",
-    marginTop: "20px",
-  },
-  searchContainer: {
-    background: "rgba(255, 255, 255, 0.7)",
-    padding: "16px",
-    width: "60%",
-    borderRadius: "10px",
-    display: "flex",
-    alignItems: "center",
-  },
-  searchInput: {
-    flex: 1,
-    marginRight: "16px", // Add margin to the input
-  },
-  searchButton: {
-    marginLeft: "16px",
-  },
+  // Your styles here
 }));
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="localhost:3000">
-        SHS
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const cards = [1, 2, 3, 4, 5, 6];
-
-// TODO remove, this demo shouldn't need to reset the theme.
+// TODO: Remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 function SearchResultsPage() {
   const router = useRouter();
   const classes = useStyles();
-  const { keyword } = router.query;
-  const handleSearch = () => {
-    // Define the function to handle the search button click
-    // You can navigate to a specific page by providing the route path
-    // Get the search keyword from the input field
-    const searchKeyword = document.getElementById("searchInput").value;
+  // Provide a default value for keyword when it's not available
+  const { keyword = "" } = router.query;
 
-    // Use router.push() to navigate to the next page with the search keyword as a query parameter
-    router.push({
-      pathname: "/results", // Replace with your target page's route
-      query: { keyword: searchKeyword },
-    });
-  };
+  // Filter properties based on the search keyword and approval status
+  const filteredProperties = propertiesData.properties
+    .filter(
+      (property) =>
+        property.address.toLowerCase().includes(keyword.toLowerCase()) ||
+        property.propertyownerName
+          .toLowerCase()
+          .includes(keyword.toLowerCase()) ||
+        property.description.toLowerCase().includes(keyword.toLowerCase())
+      // Add more criteria if needed
+    )
+    .filter((property) => property.approvalStatus === "1");
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -114,10 +73,10 @@ function SearchResultsPage() {
               color="text.primary"
               gutterBottom
             >
-              City Name Placeholder
+              {keyword}
             </Typography>
           </Container>
-          <Container maxWidth="sm" className={classes.searchContainer}>
+          <Container maxWidth="sm">
             <TextField
               id="searchInput"
               label="Search using University, City, or Zipcode..."
@@ -130,68 +89,76 @@ function SearchResultsPage() {
               variant="contained"
               color="primary"
               className={classes.searchButton}
-              onClick={handleSearch} // Attach the click event to the handleSearch function
+              onClick={() => {
+                const searchKeyword =
+                  document.getElementById("searchInput").value;
+                router.push({
+                  pathname: "/results",
+                  query: { keyword: searchKeyword },
+                });
+              }}
             >
               Search
             </Button>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Link href="/property/details" passHref>
-                  <a>
-                    <Card
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardMedia
-                        component="div"
+          {/* Display property details or no results message */}
+          {filteredProperties.length === 0 ? (
+            <Typography
+              variant="h5"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              Sorry, no results found.
+            </Typography>
+          ) : (
+            <Grid container spacing={4}>
+              {filteredProperties.map((property, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4}>
+                  <Link href={`/property/${property.id}`} passHref>
+                    <a target="_blank" rel="noopener noreferrer">
+                      <Card
                         sx={{
-                          // 16:9
-                          pt: "56.25%",
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
                         }}
-                        image="/placeholder.png"
-                      />
-                      <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          Property {card} Name
-                        </Typography>
-                        <Typography>Property Description</Typography>
-                        <Typography>Property Price</Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small">View</Button>
-                      </CardActions>
-                    </Card>
-                  </a>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+                      >
+                        <CardMedia
+                          component="div"
+                          sx={{
+                            // 16:9
+                            pt: "56.25%",
+                          }}
+                          image={(() => {
+                            const imageUrl = property.images[0];
+                            console.log(imageUrl);
+                            return imageUrl;
+                          })()} // Immediately invoked function to log and return the image URL
+                        />
+                        <CardContent sx={{ flexGrow: 1 }}>
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {property.propertyownerName}'s Property
+                          </Typography>
+                          <Typography>{property.address}</Typography>
+                          <Typography>{property.description}</Typography>
+                          <Typography>{`Price: $${property.price}`}</Typography>
+                          {/* Add more details as needed */}
+                        </CardContent>
+                        <CardActions>
+                          <Button size="small">View</Button>
+                        </CardActions>
+                      </Card>
+                    </a>
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Container>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

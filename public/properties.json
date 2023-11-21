@@ -1,0 +1,191 @@
+{
+  "properties": [
+    {
+      "propertyownerName": "Spring Garden",
+      "address": "1918 MKN Street, Greensboro",
+      "price": "900",
+      "amenities": "wifi, swimming pool, gym",
+      "housingType": "Apartment",
+      "description": "The apartment is around 2 miles away from UNCG.",
+      "contactEmail": "springgarden@gmail.com",
+      "contactPhone": "+1 984 123 4567",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 4
+    },
+    {
+      "propertyownerName": "Melvick",
+      "address": "1908 MIN Street, Greensboro",
+      "price": "800",
+      "amenities": "wifi, gym",
+      "housingType": "Townhome",
+      "description": "A townhome with 4 bedrooms, 3 full bath, and one half bath. Located within 2 miles from the UNCG.",
+      "contactEmail": "mk12@gmail.com",
+      "contactPhone": "+1 989 000 0000",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 2
+    },
+    {
+      "propertyownerName": "Kelvin",
+      "address": "1918 MKN Street, Greensboro",
+      "price": "900",
+      "amenities": "wifi, swimming pool, gym",
+      "housingType": "Apartment",
+      "description": "The apartment is around 2 miles away from UNCG.",
+      "contactEmail": "kelvin123@gmail.com",
+      "contactPhone": "+1 984 267 0000",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/0cebcc52-d0c6-4e7b-bff5-4283c09458eb"
+      ],
+      "id": 3
+    },
+    {
+      "propertyownerName": "Property 4 Owner",
+      "address": "1234 ABC Street, Greensboro",
+      "price": "1200",
+      "amenities": "wifi, parking",
+      "housingType": "House",
+      "description": "A spacious house with 3 bedrooms and a large backyard.",
+      "contactEmail": "property4owner@gmail.com",
+      "contactPhone": "+1 987 654 3210",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 5
+    },
+    {
+      "propertyownerName": "Jane Doe",
+      "address": "5678 XYZ Street, Greensboro",
+      "price": "950",
+      "amenities": "wifi, gym",
+      "housingType": "Condo",
+      "description": "A modern condo with 2 bedrooms and a fitness center.",
+      "contactEmail": "janedoe@gmail.com",
+      "contactPhone": "+1 123 456 7890",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 6
+    },
+    {
+      "propertyownerName": "John Smith",
+      "address": "8765 PQR Street, Greensboro",
+      "price": "1100",
+      "amenities": "wifi, pool, parking",
+      "housingType": "Apartment",
+      "description": "An apartment with 2 bedrooms, a pool, and parking facilities.",
+      "contactEmail": "johnsmith@gmail.com",
+      "contactPhone": "+1 456 789 0123",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/5af44d2c-eb6f-47e0-b745-5d8a9342932b"
+      ],
+      "id": 7
+    },
+    {
+      "propertyownerName": "Emily Johnson",
+      "address": "3456 LMN Street, Greensboro",
+      "price": "850",
+      "amenities": "wifi, gym",
+      "housingType": "Townhome",
+      "description": "A townhome with 3 bedrooms and a small gym.",
+      "contactEmail": "emilyjohnson@gmail.com",
+      "contactPhone": "+1 321 987 6543",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 8
+    },
+    {
+      "propertyownerName": "Michael Brown",
+      "address": "2345 EFG Street, Greensboro",
+      "price": "1000",
+      "amenities": "wifi, pool",
+      "housingType": "House",
+      "description": "A cozy house with 2 bedrooms and a pool.",
+      "contactEmail": "michaelbrown@gmail.com",
+      "contactPhone": "+1 876 543 2109",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634"
+      ],
+      "id": 9
+    },
+    {
+      "propertyownerName": "Amanda White",
+      "address": "4567 OPQ Street, Greensboro",
+      "price": "950",
+      "amenities": "wifi, gym, pool",
+      "housingType": "Apartment",
+      "description": "An apartment with 1 bedroom, a gym, and a pool.",
+      "contactEmail": "amandawhite@gmail.com",
+      "contactPhone": "+1 234 567 8901",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/48a6d75d-90c3-44a8-99c1-77f1951363e6"
+      ],
+      "id": 10
+    },
+    {
+      "propertyownerName": "ss",
+      "address": "Greensboro",
+      "price": "888",
+      "amenities": "ss",
+      "housingType": "ss",
+      "description": "ss",
+      "contactEmail": "ss@ss.ss",
+      "contactPhone": "8888888888",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/4fa1aab5-0218-4ab7-a33c-74d0bba6a7ed"
+      ],
+      "id": 11
+    },
+    {
+      "propertyownerName": "sss",
+      "address": "sss",
+      "price": "888",
+      "amenities": "sss",
+      "housingType": "sss",
+      "description": "sss",
+      "contactEmail": "sss@sss.sss",
+      "contactPhone": "8888888888",
+      "approvalStatus": "0",
+      "images": [
+        "blob:http://localhost:3000/11b22449-25b4-4716-8667-f4c08666f634",
+        "blob:http://localhost:3000/4fa1aab5-0218-4ab7-a33c-74d0bba6a7ed",
+        "blob:http://localhost:3000/48a6d75d-90c3-44a8-99c1-77f1951363e6",
+        "blob:http://localhost:3000/5af44d2c-eb6f-47e0-b745-5d8a9342932b",
+        "blob:http://localhost:3000/badc9821-0a84-4077-8afd-48e884fbdf97",
+        "blob:http://localhost:3000/89d8dcb4-0068-4e5a-845a-87d8caab6d83",
+        "blob:http://localhost:3000/0cebcc52-d0c6-4e7b-bff5-4283c09458eb",
+        "blob:http://localhost:3000/8144edd1-004e-4e39-b080-be617013c455"
+      ],
+      "id": 12
+    },
+    {
+      "propertyownerName": "ssss",
+      "address": "Greensboro",
+      "price": "888",
+      "amenities": "ssss",
+      "housingType": "ssss",
+      "description": "ssss",
+      "contactEmail": "ssss@ssss.ssss",
+      "contactPhone": "888888888888",
+      "approvalStatus": "1",
+      "images": [
+        "blob:http://localhost:3000/92f368cb-022c-47b0-b179-73c39da79946"
+      ],
+      "id": 13
+    }
+  ]
+}

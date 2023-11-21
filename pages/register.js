@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,6 +13,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useRouter } from "next/router";
+
+// Add a function to check if all required fields are filled
+const validateFields = (data) => {
+  const requiredFields = ["firstName", "lastName", "email", "password"];
+  return requiredFields.every((field) => data.get(field));
+};
 
 function Copyright(props) {
   return (
@@ -36,13 +44,82 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true); // Track loading state
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/db.json");
+        const userData = await response.json();
+        setUsers(userData.users || []); // Ensure users is set as an array
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+  const router = useRouter(); // Initialize the router
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const formData = new FormData(event.target); 
+
+     // Check if loading is still true, wait for data to be fetched
+     if (loading) {
+      setTimeout(() => {
+        handleSubmit(event);
+      }, 100); // Retry after a small delay
+      return;
+    }
+
+    // Check if the email already exists
+    const enteredEmail = formData.get("email");
+    const existingUser = users.find((user) => user.email === enteredEmail);
+    if (existingUser) {
+      alert("Account already exists. Please sign in.");
+      return;
+    }
+
+    // Check if all required fields are filled
+    if (!validateFields(formData)) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3001/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.get("firstName"),
+          lastName: formData.get("lastName"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      });
+
+      if (response.ok) {
+        router.push({
+          pathname: "/homepage", 
+        });
+      } else if (response.status === 409) {
+        // Account already exists
+        alert("Account already exists. Please sign in.");
+      } else {
+        // Handle other errors if necessary
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -123,7 +200,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -135,3 +212,5 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+

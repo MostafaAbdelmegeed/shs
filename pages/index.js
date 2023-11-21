@@ -14,6 +14,11 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
 
+const adminCredentials = {
+  email: "admin123@gmail.com",
+  password: "admin123",
+};
+
 function Copyright(props) {
   return (
     <Typography
@@ -32,19 +37,70 @@ function Copyright(props) {
   );
 }
 
-const defaultTheme = createTheme();
-
-export default function SignInSide() {
+function SignInSide() {
   const router = useRouter();
+  const [loading, setLoading] = React.useState(true);
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/db.json");
+        const userData = await response.json();
+        setUsers(userData.users);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    router.push("/homepage");
-  };
+    const formData = new FormData(event.currentTarget);
+    const enteredEmail = formData.get("email");
+    const enteredPassword = formData.get("password");
+
+    if (loading) {
+      setTimeout(() => {
+        handleSubmit(event);
+      }, 100);
+      return;
+    }
+
+    const requiredFields = ["email", "password"]; // Add other required fields
+    const hasEmptyField = requiredFields.some(
+      (field) => !formData.get(field)?.trim()
+    );
+
+    if (hasEmptyField) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const user = users.find(
+      (user) => user.email === enteredEmail && user.password === enteredPassword
+    );
+
+    if (!user) {
+      alert("Invalid email or password. Please try again.");
+      return;
+    }
+
+    if (
+      enteredEmail === adminCredentials.email &&
+      enteredPassword === adminCredentials.password
+    ) {
+      router.push("/admin");
+    } else {
+      router.push("/homepage");
+    }
+  }; 
+
+  const defaultTheme = createTheme();
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -129,7 +185,7 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -142,3 +198,5 @@ export default function SignInSide() {
     </ThemeProvider>
   );
 }
+
+export default SignInSide;
