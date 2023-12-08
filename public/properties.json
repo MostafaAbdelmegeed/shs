@@ -181,7 +181,7 @@
       "description": "ssss",
       "contactEmail": "ssss@ssss.ssss",
       "contactPhone": "888888888888",
-      "approvalStatus": "1",
+      "approvalStatus": "0",
       "images": [
         "blob:http://localhost:3000/92f368cb-022c-47b0-b179-73c39da79946"
       ],
