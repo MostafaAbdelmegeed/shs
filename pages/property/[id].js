@@ -86,7 +86,7 @@ const PropertyDetailsPage = () => {
     if (!window.google || !window.google.maps) {
       // Create a script element for the Google Maps API
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAXBIS8zw2wLdMWPLBFaCBx1LwkQnJUHmM&callback=initMap`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=<API_KEY>&callback=initMap`;
       script.async = true;
       script.defer = true;
       document.head.appendChild(script);
